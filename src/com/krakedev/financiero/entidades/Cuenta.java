@@ -53,6 +53,8 @@ public class Cuenta {
 		System.out.println("Saldo Actual      : " + saldoActual);
 		System.out.println("Tipo : " + tipo);
 		System.out.println("Cédula cliente : " + propietario.getCedula());
+		System.out.println("Nombre cliente : " + propietario.getNombre());
+		System.out.println("Apellido cliente : " + propietario.getApellido());
 		System.out.println("************************");
 	}
 
