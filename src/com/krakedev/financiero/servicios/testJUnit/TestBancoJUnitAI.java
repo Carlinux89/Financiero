@@ -271,4 +271,119 @@ public class TestBancoJUnitAI {
 		assertEquals(600.0, cuenta.getSaldoActual(), 0.0001);
 	}
 
+	/**
+	 * Valida que una transferencia válida descuente el monto de la cuenta origen,
+	 * incremente el saldo de la cuenta destino y retorne true.
+	 */
+	@Test
+	public void testTransferenciaExitosa() {
+
+		Banco banco = new Banco();
+
+		Cuenta origen = new Cuenta("C010");
+		Cuenta destino = new Cuenta("C011");
+
+		origen.setSaldoActual(500.0);
+		destino.setSaldoActual(100.0);
+
+		boolean resultado = banco.transferir(origen, destino, 200.0);
+
+		assertTrue(resultado);
+
+		assertEquals(300.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(300.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida el caso límite donde se transfiere exactamente todo el saldo
+	 * disponible de la cuenta origen.
+	 */
+	@Test
+	public void testTransferirSaldoCompleto() {
+
+		Banco banco = new Banco();
+
+		Cuenta origen = new Cuenta("C012");
+		Cuenta destino = new Cuenta("C013");
+
+		origen.setSaldoActual(400.0);
+		destino.setSaldoActual(50.0);
+
+		boolean resultado = banco.transferir(origen, destino, 400.0);
+
+		assertTrue(resultado);
+
+		assertEquals(0.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(450.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que una transferencia sea rechazada cuando la cuenta origen no dispone
+	 * de saldo suficiente para cubrir el monto solicitado.
+	 */
+	@Test
+	public void testTransferenciaSaldoInsuficiente() {
+
+		Banco banco = new Banco();
+
+		Cuenta origen = new Cuenta("C014");
+		Cuenta destino = new Cuenta("C015");
+
+		origen.setSaldoActual(100.0);
+		destino.setSaldoActual(200.0);
+
+		boolean resultado = banco.transferir(origen, destino, 150.0);
+
+		assertFalse(resultado);
+
+		assertEquals(100.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(200.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que una transferencia con monto cero sea rechazada y no modifique los
+	 * saldos de ninguna de las cuentas.
+	 */
+	@Test
+	public void testTransferenciaMontoCero() {
+
+		Banco banco = new Banco();
+
+		Cuenta origen = new Cuenta("C016");
+		Cuenta destino = new Cuenta("C017");
+
+		origen.setSaldoActual(300.0);
+		destino.setSaldoActual(100.0);
+
+		boolean resultado = banco.transferir(origen, destino, 0.0);
+
+		assertFalse(resultado);
+
+		assertEquals(300.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(100.0, destino.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que una transferencia con monto negativo sea rechazada y que los
+	 * saldos permanezcan sin cambios.
+	 */
+	@Test
+	public void testTransferenciaMontoNegativo() {
+
+		Banco banco = new Banco();
+
+		Cuenta origen = new Cuenta("C018");
+		Cuenta destino = new Cuenta("C019");
+
+		origen.setSaldoActual(500.0);
+		destino.setSaldoActual(250.0);
+
+		boolean resultado = banco.transferir(origen, destino, -50.0);
+
+		assertFalse(resultado);
+
+		assertEquals(500.0, origen.getSaldoActual(), 0.0001);
+		assertEquals(250.0, destino.getSaldoActual(), 0.0001);
+	}
+
 }

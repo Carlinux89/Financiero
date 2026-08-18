@@ -51,4 +51,14 @@ public class Banco {
 		}
 	}
 
+	public boolean transferir(Cuenta origen, Cuenta destino, double monto) {
+		boolean estadoTransferencia = retirar(monto, origen);
+		if (!estadoTransferencia) {
+			return false;
+		} else {
+			depositar(monto, destino);
+			return true;
+		}
+	}
+
 }
