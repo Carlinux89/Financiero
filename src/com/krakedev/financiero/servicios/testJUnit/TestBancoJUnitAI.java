@@ -1,7 +1,9 @@
 package com.krakedev.financiero.servicios.testJUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -93,5 +95,92 @@ public class TestBancoJUnitAI {
 
 		assertEquals("5000", cuenta.getId());
 		assertEquals(5001, banco.getUltimoCodigo());
+	}
+
+	/**
+	 * Valida que un depósito con monto positivo sea aceptado y que el saldo se
+	 * incremente exactamente con el valor depositado.
+	 */
+	@Test
+	public void testDepositarExitoso() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C001");
+
+		boolean resultado = banco.depositar(100.0, cuenta);
+
+		assertTrue(resultado);
+		assertEquals(100.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que al depositar sobre una cuenta que ya tiene saldo, el nuevo saldo
+	 * sea la suma del saldo anterior más el depósito.
+	 */
+	@Test
+	public void testDepositarConSaldoPrevio() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C002");
+		cuenta.setSaldoActual(200.0);
+
+		boolean resultado = banco.depositar(50.0, cuenta);
+
+		assertTrue(resultado);
+		assertEquals(250.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que un depósito de valor cero sea rechazado y que el saldo de la
+	 * cuenta no sea modificado.
+	 */
+	@Test
+	public void testDepositarMontoCero() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C003");
+		cuenta.setSaldoActual(300.0);
+
+		boolean resultado = banco.depositar(0, cuenta);
+
+		assertFalse(resultado);
+		assertEquals(300.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que un depósito co* monto negativo sea rechazado y*que el saldo
+	 * permanezca exactam*nte igual.
+	 */
+	@Test
+	public void testDepositarMontoNegativo() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C004");
+		cuenta.setSaldoActual(500.0);
+
+		boolean resultado = banco.depositar(-50.0, cuenta);
+
+		assertFalse(resultado);
+		assertEquals(500.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que una cuenta creada quede asociada correctamente al cliente recibido
+	 * como parámetro.
+	 */
+	@Test
+	public void testCrearCuentaConPropietario() {
+
+		Banco banco = new Banco();
+
+		Cliente cliente = new Cliente("1723456789", "Carlos", "Chavez");
+
+		Cuenta cuenta = banco.crearCuenta(cliente);
+
+		assertEquals(cliente, cuenta.getPropietario());
 	}
 }
