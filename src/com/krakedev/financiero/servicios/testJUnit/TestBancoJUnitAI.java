@@ -183,4 +183,92 @@ public class TestBancoJUnitAI {
 
 		assertEquals(cliente, cuenta.getPropietario());
 	}
+
+	/**
+	 * Valida que un retiro con monto válido sea procesado correctamente y que el
+	 * saldo disminuya en el valor retirado.
+	 */
+	@Test
+	public void testRetirarExitoso() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C005");
+		cuenta.setSaldoActual(500.0);
+
+		boolean resultado = banco.retirar(100.0, cuenta);
+
+		assertTrue(resultado);
+		assertEquals(400.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida el caso límite donde el monto a retirar es exactamente igual al saldo
+	 * disponible en la cuenta.
+	 */
+	@Test
+	public void testRetirarSaldoCompleto() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C006");
+		cuenta.setSaldoActual(300.0);
+
+		boolean resultado = banco.retirar(300.0, cuenta);
+
+		assertTrue(resultado);
+		assertEquals(0.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que un retiro sea rechazado cuando el monto solicitado es mayor al
+	 * saldo disponible en la cuenta.
+	 */
+	@Test
+	public void testRetirarMontoMayorAlSaldo() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C007");
+		cuenta.setSaldoActual(200.0);
+		boolean resultado = banco.retirar(250.0, cuenta);
+
+		assertFalse(resultado);
+		assertEquals(200.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que un retiro con monto cero sea rechazado y que el saldo no cambie.
+	 */
+	@Test
+	public void testRetirarMontoCero() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C008");
+		cuenta.setSaldoActual(400.0);
+
+		boolean resultado = banco.retirar(0.0, cuenta);
+		assertFalse(resultado);
+		assertEquals(400.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
+	/**
+	 * Valida que un retiro con monto negativo sea rechazado y que el saldo
+	 * permanezca sin modificaciones.
+	 */
+	@Test
+	public void testRetirarMontoNegativo() {
+
+		Banco banco = new Banco();
+
+		Cuenta cuenta = new Cuenta("C009");
+		cuenta.setSaldoActual(600.0);
+
+		boolean resultado = banco.retirar(-5 * .0, cuenta);
+
+		assertFalse(resultado);
+		assertEquals(600.0, cuenta.getSaldoActual(), 0.0001);
+	}
+
 }
