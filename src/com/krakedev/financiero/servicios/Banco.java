@@ -61,4 +61,15 @@ public class Banco {
 		}
 	}
 
+	public boolean cobrarMantenimiento(Cuenta cuenta, double monto) {
+		if (monto > 0 && monto <= cuenta.getSaldoActual()) {
+			double saldoActual = cuenta.getSaldoActual() - monto;
+			cuenta.setSaldoActual(saldoActual);
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
 }

@@ -5,12 +5,14 @@ public class Cliente {
 	private String cedula;
 	private String nombre;
 	private String apellido;
+	private Direccion direccionDomicilio;
 
 	public Cliente(String cedula, String nombre, String apellido) {
-		super();
+
 		this.cedula = cedula;
 		this.nombre = nombre;
 		this.apellido = apellido;
+		direccionDomicilio = new Direccion();
 	}
 
 	public Cliente() {
@@ -38,6 +40,14 @@ public class Cliente {
 
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
+	}
+
+	public Direccion getDireccionDomicilio() {
+		return direccionDomicilio;
+	}
+
+	public void setDireccionDomicilio(Direccion direccionDomicilio) {
+		this.direccionDomicilio = direccionDomicilio;
 	}
 
 	public void imprimir() {
